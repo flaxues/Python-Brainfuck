@@ -45,7 +45,26 @@ def evaluate(code):
 
 
 def cleanup(code):
-  return filter(lambda x: x in ['.', ',', '[', ']', '<', '>', '+', '-'], code)
+  return ''.join(filter(lambda x: x in ['.', ',', '[', ']', '<', '>', '+', '-'], code))
+
+
+def buildbracemap(code):
+  temp_bracestack, bracemap = [], {}
+
+  for position, command in enumerate(code):
+    if command == "[": temp_bracestack.append(position)
+    if command == "]":
+      start = temp_bracestack.pop()
+      bracemap[start] = position
+      bracemap[position] = start
+  return bracemap
+
+
+def main():
+  if len(sys.argv) == 2: execute(sys.argv[1])
+  else: print("Usage:", sys.argv[0], "filename")
+
+if __name__ == "__main__": main()
 
 
 def buildbracemap(code):
